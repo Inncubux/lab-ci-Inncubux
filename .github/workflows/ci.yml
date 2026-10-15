@@ -8,19 +8,16 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
       - name: Ejecutar pruebas
         run: python -m unittest -v
-      - name: Probar un secreto
-        env:
-          MI_SECRETO: ${{ secrets.MI_SECRETO }}
-        run: |
-          echo "El secreto tiene ${#MI_SECRETO} caracteres"
-          echo "Su valor es: $MI_SECRETO"
 
   docker:
     needs: test
